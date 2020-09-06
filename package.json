@@ -1,0 +1,27 @@
+{
+  "name": "greatgamegal.com",
+  "version": "1.0.0",
+  "description": "A personal website developed by GreatGameGal.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node .",
+    "dev": "nodemon --ignore ./public_html/* ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GreatGameGal/greatgamegal.com.git"
+  },
+  "author": "GreatGameGal (Serenity Braesch)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GreatGameGal/greatgamegal.com/issues"
+  },
+  "homepage": "https://github.com/GreatGameGal/greatgamegal.com#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
