@@ -1,7 +1,9 @@
 const { GitWatcher } = require("git-repo-watch");
 const watcher = new GitWatcher();
 
-module.exports = watcher.watch({
+watcher.watch({
   path: "./",
   branch: "master",
 });
+
+module.exports = watcher;
