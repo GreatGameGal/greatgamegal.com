@@ -4,6 +4,7 @@ const fs = require("fs");
 const express = require("express");
 const { port, keyPath, certPath, chainPath } = require("./config/config.js");
 const app = express();
+const repoWatcher = require("./repowatching.js");
 
 app.use("/", express.static(__dirname + "/public_html/"));
 
@@ -26,3 +27,10 @@ http.get("*", (req, res) => {
   res.redirect("https://" + req.headers.host + req.url);
 });
 http.listen(80);
+
+
+repoWatcher.result$.subscribe((result) => {
+  if (result === true) {
+    process.exit(5);
+  }
+});
