@@ -30,7 +30,7 @@ http.listen(80);
 
 
 repoWatcher.result$.subscribe((result) => {
-  if (result === true) {
+  if (result.checked === true) {
     process.exit(5);
   }
 });
