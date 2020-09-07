@@ -1,7 +1,5 @@
-
 module.exports = {
-  port: 80,
-  key: "./ssl/key.pem",
-  cert: "./ssl/cert.pem",
-  chain: "./ssl/chain.pem"
+  port: 443,
+  keyPath: "./ssl/key.pem",
+  certPath: "./ssl/cert.pem"
 }
