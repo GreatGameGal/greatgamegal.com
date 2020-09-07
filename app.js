@@ -3,15 +3,16 @@ const https = require("https");
 
 const fs = require("fs");
 const express = require("express");
-const { port, key, cert } = require("./config/config.js");
+const { port, keyPath, certPath, chainPath } = require("./config/config.js");
 const app = express();
 
 const server =
-  key && cert
+  fs.existsSync(keyPath) && fs.existsSync(certPath) && fs.existsSync(chainPath)
     ? https.createServer(
         {
-          key: key,
-          cert: cert
+          "key": fs.readFileSync(keyPath, "utf-8"),
+          "cert": fs.readFileSync(certPath, "utf-8"),
+          "ca": fs.readFileSync(chainPath, "utf-8")
         },
         app
       )
