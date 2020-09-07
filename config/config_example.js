@@ -1,7 +1,11 @@
 const fs = require("fs");
 
+function fileIfExists(path) {
+  return fs.existsSync(path)?fs.readFileSync(path):undefined;
+}
+
 module.exports = {
   port: 80,
-  key: fs.readFileSync("./ssl/key.pem"),
-  cert: fs.readFileSync("./ssl/cert.pem")
+  key: fileIfExists("./ssl/key.pem"),
+  cert: fileIfExists("./ssl/cert.pem")
 }

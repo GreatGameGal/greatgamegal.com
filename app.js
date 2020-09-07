@@ -10,8 +10,8 @@ const server =
   key && cert
     ? https.createServer(
         {
-          key: fs.readFileSync("./ssl/key.pem"),
-          cert: fs.readFileSync("./ssl/cert.pem"),
+          key: key,
+          cert: cert
         },
         app
       )
