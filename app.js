@@ -2,7 +2,7 @@ const https = require("https");
 
 const fs = require("fs");
 const express = require("express");
-const { port, keyPath, certPath, chainPath } = require("./config/config.js");
+const { port, keyPath, certPath } = require("./config/config.js");
 const app = express();
 const repoWatcher = require("./repowatching.js");
 
