@@ -1,9 +1,24 @@
-const { port } = require("./config.js");
+const http = require("http");
+const https = require("https");
+
+const fs = require("fs");
 const express = require("express");
+const { port, key, cert } = require("./config/config.js");
 const app = express();
 
-app.use("/", express.static("./public_html/"))
+const server =
+  key && cert
+    ? https.createServer(
+        {
+          key: fs.readFileSync("./ssl/key.pem"),
+          cert: fs.readFileSync("./ssl/cert.pem"),
+        },
+        app
+      )
+    : http.createServer(app);
 
-app.listen(port, () => {
+app.use("/", express.static("./public_html/"));
+
+server.listen(port, () => {
   console.log(`App is now listening on ${port}`);
 });
