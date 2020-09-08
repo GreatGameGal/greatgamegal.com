@@ -11,7 +11,7 @@ const resetButtonEl = document.getElementById("reset");
 
 const ctx = canvas.getContext("2d");
 
-const settingSaving = JSON.parse(localStorage.prefs)["storage"][
+const settingSaving = localStorage.prefs && JSON.parse(localStorage.prefs)["storage"][
   "mandelbrotStorage"
 ];
 
