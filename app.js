@@ -3,15 +3,20 @@ const fs = require("fs");
 const express = require("express");
 const { EventEmitter } = require("events");
 
-const repoWatcher = require("./repowatching.js");
 const { recursiveFileParse } = require("./functions.js");
-
-const { port, keyPath, certPath } = require("./config/config.js");
 
 class Site {
   constructor() {
-    this.events = new EventEmitter();
-    this.events.on("repoupdate", (e) => this.repoUpdate(e));
+    // Set config
+    this.config = require("./config/config.js");
+    // Secret config only exists so I can stream and show regular config on stream.
+    if (fs.existsSync("./config/secret_config.js")) {
+      this.config = Object.assign(this.config, require("./config/secret_config.js"));
+    }
+    this.events = [];
+    this.setupEventsAndListeners();
+    // Pull necessary variables from config.
+    const {keyPath, certPath, port} = this.config;
     // Create app
     this.app = express();
     // Create server, HTTPS requires key and cert.
@@ -29,9 +34,24 @@ class Site {
     });
   }
 
+  setupEventsAndListeners() {
+    this.eventHandler = new EventEmitter();
+    for (let event of this.events) {
+      this.eventHandler.removeListener(event.content.type, event.content.run);
+    }
+    this.events = recursiveFileParse("/events");
+    for(let eventFile of this.events) {
+      const event = eventFile.content;
+      if (typeof event.run === "function") {
+        event.run = event.run.bind(this);
+        this.eventHandler.addListener(event.event, event.run);
+      } else console.warn (`The run of the event file ${eventFile.path} is not valid, it must be a function.`)
+    }
+  }
+
   setMiddleWare() {
     this.app.use(express.json());
-    this.app.use(express.urlencoded());
+    this.app.use(express.urlencoded({extended: true}));
   }
 
   setRoutes() {
@@ -70,15 +90,9 @@ class Site {
       })
     );
   }
-
-  repoUpdate() {
-    // Prepare for shutdown.
-
-    // Exit process after a short wait
-    setTimeout(() => process.exit(5), 1000);
-  }
 }
 
+// Sets up the site.
 new Site();
 
 // Creates HTTP server to redirect to HTTPS server.
@@ -88,8 +102,3 @@ http.get("*", (req, res) => {
 });
 http.listen(80);
 
-repoWatcher.result$.subscribe((result) => {
-  if (result.changed === true) {
-    process.exit(5);
-  }
-});
