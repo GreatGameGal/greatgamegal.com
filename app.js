@@ -34,6 +34,7 @@ class Site {
   }
 
   setupEventsAndListeners() {
+    const start = Date.now();
     this.eventHandler = new EventEmitter();
     for (let event of this.events) {
       this.eventHandler.removeListener(event.content.type, event.content.run);
@@ -46,6 +47,7 @@ class Site {
         this.eventHandler.addListener(event.event, event.run);
       } else console.warn (`The run of the event file ${eventFile.path} is not valid, it must be a function.`)
     }
+    console.log(`Added ${this.events.length} events in ${Date.now()-start}ms.`);
   }
 
   setMiddleWare() {
@@ -54,6 +56,7 @@ class Site {
   }
 
   setRoutes() {
+    const start = Date.now();
     let routes = recursiveFileParse("/routes");
     for (let route of routes) {
       let splitPath = route.path.split("/");
@@ -81,6 +84,7 @@ class Site {
           break;
       }
     }
+    console.log(`Added ${routes.length} routes in ${Date.now()-start}ms.`);
     this.app.use(
       "/",
       express.static(__dirname + "/public_html/", {
