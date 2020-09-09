@@ -2,7 +2,6 @@ const https = require("https");
 const fs = require("fs");
 const express = require("express");
 const { EventEmitter } = require("events");
-const bodyParser = require("body-parser");
 
 const repoWatcher = require("./repowatching.js");
 const { recursiveFileParse } = require("./functions.js");
@@ -30,7 +29,10 @@ class Site {
     });
   }
 
-  setMiddleWare() {}
+  setMiddleWare() {
+    this.app.use(express.json());
+    this.app.use(express.urlencoded());
+  }
 
   setRoutes() {
     let routes = recursiveFileParse("/routes");
