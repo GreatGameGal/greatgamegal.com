@@ -1,6 +1,8 @@
 const crypto = require("crypto");
 
 module.exports = function (req, res, next) {
+  //
+
   const hmac = crypto.createHmac("sha1", this.config.github_secret);
   const sig = "sha1=" + hmac.update(JSON.stringify(req.body)).digest("hex");
   console.log(sig);
