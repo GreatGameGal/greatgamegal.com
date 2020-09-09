@@ -7,7 +7,6 @@ const { recursiveFileParse } = require("./functions.js");
 
 class Site {
   constructor() {
-    // Set config
     this.config = require("./config/config.js");
     // Secret config only exists so I can stream and show regular config on stream.
     if (fs.existsSync("./config/secret_config.js")) {
