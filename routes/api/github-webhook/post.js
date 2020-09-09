@@ -1,7 +1,6 @@
 const crypto = require("crypto");
 
 module.exports = function (req, res, next) {
-  //
   console.log("Got here");
   req.on("data", (chunk) => {
     if (
