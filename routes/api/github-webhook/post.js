@@ -14,6 +14,10 @@ module.exports = function (req, res, next) {
         res.sendStatus(200);
         this.eventHandler.emit("repopush", {});
         break;
+
+        default:
+          console.warn("Unhandled github event: " + req.headers["x-github-event"]);
+          break;
     }
   }
 };
