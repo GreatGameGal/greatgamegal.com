@@ -1,15 +1,14 @@
 const {execSync} = require("child_process");
+const secsToShutdown = 30;
 
 module.exports = {
   run: function (e) {
     switch (e.repo.full_name) {
       case this.config.nodeRepo:
-        // Log that the webserver is restarting.
-        console.log("Webserver restarting due to github repoupdate.");
-        // Prepare for shutdown (ie log users out, save data, etc).
-
+        // Call shutdown event to prepare for shutdown (ie log users out, save data, etc).
+        this.eventHandler.emit("shutdown", {time: secsToShutdown, reason: "update"})
         // Exit process after a short wait
-        setTimeout(() => process.exit(5), 1000);
+        setTimeout(() => process.exit(5), secsToShutdown*10**3);
         break;
 
       case this.config.htmlRepo:
