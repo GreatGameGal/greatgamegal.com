@@ -12,7 +12,9 @@ class Site {
     if (fs.existsSync("./config/secret_config.js")) {
       this.config = Object.assign(this.config, require("./config/secret_config.js"));
     }
+    this.eventHandler = new EventEmitter();
     this.events = [];
+    this.routes = [];
     this.setupEventsAndListeners();
     // Pull necessary variables from config.
     const {keyPath, certPath, port} = this.config;
@@ -38,7 +40,6 @@ class Site {
 
   setupEventsAndListeners() {
     const start = Date.now();
-    this.eventHandler = new EventEmitter();
     for (let event of this.events) {
       this.eventHandler.removeListener(event.content.type, event.content.run);
     }
@@ -69,11 +70,14 @@ class Site {
         case "put":
         case "patch":
         case "delete":
-          if (typeof route.content == "function")
+          if (typeof route.content == "function") {
+            route.content = route.content.bind(this);
             this.app[splitPath[splitPath.length - 1].split(".")[0]](
               "/" + splitPath.slice(2, splitPath.length - 1).join("/"),
-              route.content.bind(this)
+              route.content
             );
+          }
+
           else
             console.warn(
               `The file ${route.path} does not have a function associated to it, be sure to module.exports = your function.`

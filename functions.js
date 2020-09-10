@@ -8,12 +8,17 @@ function recursiveFileParse(path) {
     if (fs.lstatSync(`${currPath}/${file}`).isDirectory()) {
       fileReturn = fileReturn.concat(recursiveFileParse(`${path}/${file}`));
     } else {
-      fileReturn.push({
-        path: `${path}/${file}`,
-        content:
-          require(`${currPath}/${file}`) ||
-          fs.readFileSync(`${currPath}/${file}`, "utf-8"),
-      });
+      try {
+        delete require.cache[require.resolve(`${currPath}/${file}`)];
+        fileReturn.push({
+          path: `${path}/${file}`,
+          content:
+            require(`${currPath}/${file}`) ||
+            fs.readFileSync(`${currPath}/${file}`, "utf-8"),
+        });
+      } catch (err) {
+        console.error(err);
+      }
     }
   }
   return fileReturn;
