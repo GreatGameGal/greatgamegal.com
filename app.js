@@ -16,6 +16,8 @@ class Site {
     this.setupEventsAndListeners();
     // Pull necessary variables from config.
     const {keyPath, certPath, port} = this.config;
+    // Set base dir for use in events & routes.
+    this.baseDir = __dirname;
     // Create app
     this.app = express();
     // Create server, HTTPS requires key and cert.

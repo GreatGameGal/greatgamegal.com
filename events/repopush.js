@@ -15,13 +15,12 @@ module.exports = {
       case this.config.htmlRepo:
         console.log("Updating website from repo.");
         const commands = [
-          `pwd ${this.baseDir}/public_html`,
           "git fetch origin master",
           "git reset --hard origin/master",
           "git pull origin master --force"
         ];
         for (const cmd of commands) {
-          console.log(execSync(cmd).toString());
+          console.log(execSync(cmd, {cwd: `${this.baseDir}/public_html`}).toString());
         }
         console.log("Website update completed");
         break;
