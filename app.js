@@ -14,8 +14,6 @@ class Site {
     }
     this.events = [];
     this.setupEventsAndListeners();
-    // Fake website repo push to update website.
-    this.eventHandler.emit("repopush", {repo: {full_name: this.config.htmlRepo}});
     // Pull necessary variables from config.
     const {keyPath, certPath, port} = this.config;
     // Set base dir for use in events & routes.
@@ -30,11 +28,15 @@ class Site {
       },
       this.app
     );
+    // Fake website repo push to update website.
+    this.eventHandler.emit("repopush", {repo: {full_name: this.config.htmlRepo}});
+    
     this.setMiddleWare();
     this.setRoutes();
     this.server.listen(port, () => {
       console.log(`App is now listening on ${port}`);
     });
+    
   }
 
   setupEventsAndListeners() {
