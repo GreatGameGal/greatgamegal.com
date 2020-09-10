@@ -2,7 +2,7 @@ const {execSync} = require("child_process");
 
 module.exports = {
   run: function (e) {
-    switch (e.repo.id) {
+    switch (e.repo.full_name) {
       case this.config.nodeRepo:
         // Log that the webserver is restarting.
         console.log("Webserver restarting due to github repoupdate.");
