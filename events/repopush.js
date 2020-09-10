@@ -15,7 +15,7 @@ module.exports = {
       case this.config.htmlRepo:
         console.log("Updating website from repo.");
         const commands = [
-          `cd ../public_html`,
+          `cd ./public_html`,
           "git fetch origin master",
           "git reset --hard origin/master",
           "git pull origin master --force"
