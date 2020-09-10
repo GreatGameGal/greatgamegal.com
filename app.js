@@ -27,10 +27,7 @@ class Site {
         cert: fs.readFileSync(certPath, "utf-8"),
       },
       this.app
-    );
-    // Fake website repo push to update website.
-    this.eventHandler.emit("repopush", {repo: {full_name: this.config.htmlRepo}});
-    
+    );    
     this.setMiddleWare();
     this.setRoutes();
     this.server.listen(port, () => {
