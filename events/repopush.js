@@ -1,11 +1,35 @@
-module.exports = {
-  run: function () {
-    // Log that the webserver is restarting.
-    console.log("Webserver restarting due to github repoupdate.")
-    // Prepare for shutdown (ie log users out, save data, etc).
+const {execSync} = require("child_process");
 
-    // Exit process after a short wait
-    setTimeout(() => process.exit(5), 1000);
+module.exports = {
+  run: function (e) {
+    switch (e.repo.id) {
+      case this.config.nodeRepo:
+        // Log that the webserver is restarting.
+        console.log("Webserver restarting due to github repoupdate.");
+        // Prepare for shutdown (ie log users out, save data, etc).
+
+        // Exit process after a short wait
+        setTimeout(() => process.exit(5), 1000);
+        break;
+
+      case this.config.htmlRepo:
+        console.log("Updating website from repo.");
+        const commands = [
+          `cd ${__dirname}/public_html`,
+          "git fetch origin master",
+          "git reset --hard origin/master",
+          "git pull origin master --force"
+        ];
+        for (const cmd of commands) {
+          console.log(execSync(cmd).toString());
+        }
+        console.log("Website update completed");
+        break;
+
+      default:
+        console.warn("Repo updated was not recognized: " + e.repo.full_name);
+        break;
+    }
   },
   event: "repopush",
 };

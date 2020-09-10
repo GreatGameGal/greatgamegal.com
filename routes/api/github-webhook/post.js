@@ -12,7 +12,7 @@ module.exports = function (req, res, next) {
     switch (req.headers["x-github-event"]) {
       case "push":
         res.sendStatus(200);
-        this.eventHandler.emit("repopush", {});
+        this.eventHandler.emit("repo" + req.headers["x-github-event"], {req: req, repo: req.body.repository});
         break;
 
         default:
