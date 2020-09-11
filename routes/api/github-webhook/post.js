@@ -19,5 +19,7 @@ module.exports = function (req, res, next) {
           console.warn("Unhandled github event: " + req.headers["x-github-event"]);
           break;
     }
+  } else {
+    res.sendStatus(401);
   }
 };
