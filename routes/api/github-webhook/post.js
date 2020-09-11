@@ -1,7 +1,7 @@
 const crypto = require("crypto");
 
 module.exports = function (req, res, next) {
-  if (!res.headers["x-hub-signature"] || !res.body) {
+  if (!res.headers || !res.headers["x-hub-signature"] || !res.body) {
     res.sendStatus(401);
     return;
   }
