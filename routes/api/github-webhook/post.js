@@ -3,7 +3,7 @@ const crypto = require("crypto");
 module.exports = function (req, res, next) {
   if (res.headers && res.body && res.headers["x-hub-signature"]) {
     const hmac = crypto.createHmac("sha1", this.config.github_secret);
-    const sig = "sha1=" + hmac.update(JSON.stringify(req.body)).digest("hex");
+    const sig = "sha1=" + hmac.update((req.body).toString()).digest("hex");
     if (
       crypto.timingSafeEqual(
         Buffer.from(req.headers["x-hub-signature"]),
