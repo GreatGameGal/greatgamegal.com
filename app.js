@@ -32,7 +32,7 @@ class Site {
     );    
     this.setMiddleWare();
     this.setRoutes();
-    this.server.listen(port, "greatgamegal.com", () => {
+    this.server.listen({port, host: "greatgamegal.com"}, () => {
       console.log(`App is now listening on ${port}`);
     });
     
