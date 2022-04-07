@@ -16,10 +16,11 @@ module.exports = {
         const commands = [
           "git fetch origin master",
           "git reset --hard origin/master",
-          "git pull origin master --force"
+          "git pull origin master --force",
+          "yarn run build"
         ];
         for (const cmd of commands) {
-          console.log(execSync(cmd, {cwd: `${this.baseDir}/public_html`}).toString());
+          console.log(execSync(cmd, {cwd: `${this.baseDir}/static/build`}).toString());
         }
         console.log("Website update completed");
         break;

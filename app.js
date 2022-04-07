@@ -94,7 +94,7 @@ class Site {
     console.log(`Added ${routes.length} routes in ${Date.now()-start}ms.`);
     this.app.use(
       "/",
-      express.static(__dirname + "/public_html/", {
+      express.static(__dirname + "/static/build/", {
         dotfiles: "ignore",
         extensions: ["html", "htm", "js", "css"],
       })
