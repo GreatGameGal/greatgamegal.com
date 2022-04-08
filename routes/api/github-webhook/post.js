@@ -1,34 +1,23 @@
 const crypto = require("crypto");
 
 module.exports = function (req, res, next) {
-  if (req.headers && req.body && req.headers["x-hub-signature"]) {
-    const hmac = crypto.createHmac("sha1", this.config.github_secret);
-    const sig = "sha1=" + hmac.update((req.body).toString()).digest("hex");
-    if (
-      crypto.timingSafeEqual(
-        Buffer.from(req.headers["x-hub-signature"]),
-        Buffer.from(sig)
-      )
-    ) {
-      switch (req.headers["x-github-event"]) {
-        case "push":
-          res.sendStatus(200);
-          this.eventHandler.emit("repo" + req.headers["x-github-event"], {
-            req: req,
-            repo: req.body.repository,
-          });
-          break;
+  if (req.headers && req.headers["x-hub-signature-256"]) {
+    let data = "";
+    req.on("data", (chunk) => {
+      data += chunk;
+    });
 
-        default:
-          console.warn(
-            "Unhandled github event: " + req.headers["x-github-event"]
-          );
-          break;
+    req.once("close",() => {
+      const sig = "sha256=" + crypto.createHmac("sha256", this.config.github_secret).update(data).digest("hex");
+
+      if (crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(req.headers["x-hub-signature-256"]))) {
+        const body = JSON.parse(data);
+        this.eventHandler.emit("repo" + req.headers["x-github-event"], {body, repo: body.repository});
+
+        res.sendStatus(200);
+        return res.end()
       }
-    } else {
       res.sendStatus(401);
-    }
-  } else {
-    res.sendStatus(401);
-  }
+    }) 
+  } else res.sendStatus(401);
 };

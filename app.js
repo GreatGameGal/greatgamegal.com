@@ -55,7 +55,6 @@ class Site {
   }
 
   setMiddleWare() {
-    this.app.use(express.json());
     this.app.use(express.urlencoded({extended: true}));
   }
 
