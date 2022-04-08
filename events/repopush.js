@@ -1,4 +1,4 @@
-const {execSync} = require("child_process");
+const { execSync } = require("child_process");
 const secsToShutdown = 30;
 
 module.exports = {
@@ -6,22 +6,26 @@ module.exports = {
     switch (e.repo.name) {
       case this.config.nodeRepo:
         // Call shutdown event to prepare for shutdown (ie log users out, save data, etc).
-        this.eventHandler.emit("shutdown", {time: secsToShutdown, reason: "update"})
+        this.eventHandler.emit("shutdown", {
+          time: secsToShutdown,
+          reason: "update",
+        });
         // Exit process after a short wait
-        setTimeout(() => process.exit(5), secsToShutdown*10**3);
+        setTimeout(() => process.exit(5), secsToShutdown * 10 ** 3);
         break;
 
       case this.config.htmlRepo:
         console.log("Updating website from repo.");
-        const commands = [
+        for (const cmd of [
           "git fetch origin master",
           "git reset --hard origin/master",
           "git pull origin master --force",
           "yarn install",
-          "yarn run build"
-        ];
-        for (const cmd of commands) {
-          console.log(execSync(cmd, {cwd: `${this.baseDir}/static`}).toString());
+          "yarn run build",
+        ]) {
+          console.log(
+            execSync(cmd, { cwd: `${this.baseDir}/static` }).toString()
+          );
         }
         console.log("Website update completed");
         break;

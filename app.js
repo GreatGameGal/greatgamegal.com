@@ -10,14 +10,17 @@ class Site {
     this.config = require("./config/config.js");
     // Secret config only exists so I can stream and show regular config on stream.
     if (fs.existsSync("./config/secret_config.js")) {
-      this.config = Object.assign(this.config, require("./config/secret_config.js"));
+      this.config = Object.assign(
+        this.config,
+        require("./config/secret_config.js")
+      );
     }
     this.eventHandler = new EventEmitter();
     this.events = [];
     this.routes = [];
     this.setupEventsAndListeners();
     // Pull necessary variables from config.
-    const {keyPath, certPath, port} = this.config;
+    const { keyPath, certPath, port } = this.config;
     // Set base dir for use in events & routes.
     this.baseDir = __dirname;
     // Create app
@@ -29,13 +32,12 @@ class Site {
         cert: fs.readFileSync(certPath, "utf-8"),
       },
       this.app
-    );    
+    );
     this.setMiddleWare();
     this.setRoutes();
     this.server.listen(port, () => {
       console.log(`App is now listening on ${port}`);
     });
-    
   }
 
   setupEventsAndListeners() {
@@ -44,18 +46,23 @@ class Site {
       this.eventHandler.removeListener(event.content.type, event.content.run);
     }
     this.events = recursiveFileParse("/events");
-    for(let eventFile of this.events) {
+    for (let eventFile of this.events) {
       const event = eventFile.content;
       if (typeof event.run === "function") {
         event.run = event.run.bind(this);
         this.eventHandler.addListener(event.event, event.run);
-      } else console.warn (`The run of the event file ${eventFile.path} is not valid, it must be a function.`)
+      } else
+        console.warn(
+          `The run of the event file ${eventFile.path} is not valid, it must be a function.`
+        );
     }
-    console.log(`Added ${this.events.length} events in ${Date.now()-start}ms.`);
+    console.log(
+      `Added ${this.events.length} events in ${Date.now() - start}ms.`
+    );
   }
 
   setMiddleWare() {
-    this.app.use(express.urlencoded({extended: true}));
+    this.app.use(express.urlencoded({ extended: true }));
   }
 
   setRoutes() {
@@ -75,9 +82,7 @@ class Site {
               "/" + splitPath.slice(2, splitPath.length - 1).join("/"),
               route.content
             );
-          }
-
-          else
+          } else
             console.warn(
               `The file ${route.path} does not have a function associated to it, be sure to module.exports = your function.`
             );
@@ -90,7 +95,7 @@ class Site {
           break;
       }
     }
-    console.log(`Added ${routes.length} routes in ${Date.now()-start}ms.`);
+    console.log(`Added ${routes.length} routes in ${Date.now() - start}ms.`);
     this.app.use(
       "/",
       express.static(__dirname + "/static/build/", {
@@ -110,4 +115,3 @@ http.get("*", (req, res) => {
   res.redirect("https://" + req.headers.host + req.url);
 });
 http.listen(80);
-
