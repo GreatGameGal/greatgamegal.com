@@ -3,7 +3,7 @@ const secsToShutdown = 30;
 
 module.exports = {
   run: function (e) {
-    switch (e.repo.full_name) {
+    switch (e.repo.name) {
       case this.config.nodeRepo:
         // Call shutdown event to prepare for shutdown (ie log users out, save data, etc).
         this.eventHandler.emit("shutdown", {time: secsToShutdown, reason: "update"})
@@ -21,7 +21,7 @@ module.exports = {
           "yarn run build"
         ];
         for (const cmd of commands) {
-          console.log(execSync(cmd, {cwd: `${this.baseDir}/static/build`}).toString());
+          console.log(execSync(cmd, {cwd: `${this.baseDir}/static`}).toString());
         }
         console.log("Website update completed");
         break;
