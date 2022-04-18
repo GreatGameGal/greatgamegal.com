@@ -22,11 +22,9 @@ module.exports = {
           "git pull origin master --force",
           "yarn install",
           "yarn run build",
-        ]) {
-          console.log(
-            execSync(cmd, { cwd: `${this.baseDir}/static` }).toString()
-          );
-        }
+        ])
+          console.log(execSync(cmd, { cwd: `${this.baseDir}/static` }).toString());
+
         console.log("Website update completed");
         break;
 

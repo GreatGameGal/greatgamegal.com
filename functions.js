@@ -1,13 +1,13 @@
 const fs = require("fs");
 
-function recursiveFileParse(path) {
-  let currPath = __dirname.replace(/\\/g, "/") + path;
+function recursiveFileParse (path) {
+  const currPath = __dirname.replace(/\\/g, "/") + path;
   const fileReturn = [];
-  for (let file of fs.readdirSync(currPath)) {
+  for (const file of fs.readdirSync(currPath)) {
     if (fs.lstatSync(`${currPath}/${file}`).isDirectory()) {
-      for (let returnedFile of recursiveFileParse(`${path}/${file}`)) {
+      for (const returnedFile of recursiveFileParse(`${path}/${file}`))
         fileReturn.push(returnedFile);
-      }
+
     } else {
       try {
         delete require.cache[require.resolve(`${currPath}/${file}`)];

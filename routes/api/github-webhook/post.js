@@ -11,7 +11,7 @@ module.exports = function (req, res) {
       const sig =
         "sha256=" +
         crypto
-          .createHmac("sha256", this.config.github_secret)
+          .createHmac("sha256", this.config.githubSecret)
           .update(data)
           .digest("hex");
 
@@ -28,9 +28,11 @@ module.exports = function (req, res) {
         });
 
         res.sendStatus(200);
-        return res.end();
       }
       res.sendStatus(401);
     });
-  } else res.sendStatus(401);
+  } else
+    res.sendStatus(401);
+
+  res.end();
 };

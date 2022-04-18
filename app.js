@@ -6,7 +6,7 @@ const { EventEmitter } = require("events");
 const { recursiveFileParse } = require("./functions.js");
 
 class Site {
-  constructor() {
+  constructor () {
     this.config = require("./config/config.js");
     // Secret config only exists so I can stream and show regular config on stream.
     if (fs.existsSync("./config/secret_config.js")) {
@@ -20,7 +20,9 @@ class Site {
     this.routes = [];
     this.setupEventsAndListeners();
     // Pull necessary variables from config.
-    const { keyPath, certPath, port } = this.config;
+    const {
+      keyPath, certPath, port,
+    } = this.config;
     // Set base dir for use in events & routes.
     this.baseDir = __dirname;
     // Create app
@@ -40,36 +42,32 @@ class Site {
     });
   }
 
-  setupEventsAndListeners() {
+  setupEventsAndListeners () {
     const start = Date.now();
-    for (let event of this.events) {
+    for (const event of this.events)
       this.eventHandler.removeListener(event.content.type, event.content.run);
-    }
+
     this.events = recursiveFileParse("/events");
-    for (let eventFile of this.events) {
+    for (const eventFile of this.events) {
       const event = eventFile.content;
       if (typeof event.run === "function") {
         event.run = event.run.bind(this);
         this.eventHandler.addListener(event.event, event.run);
       } else
-        console.warn(
-          `The run of the event file ${eventFile.path} is not valid, it must be a function.`
-        );
+        console.warn(`The run of the event file ${eventFile.path} is not valid, it must be a function.`);
     }
-    console.log(
-      `Added ${this.events.length} events in ${Date.now() - start}ms.`
-    );
+    console.log(`Added ${this.events.length} events in ${Date.now() - start}ms.`);
   }
 
-  setMiddleWare() {
+  setMiddleWare () {
     this.app.use(express.urlencoded({ extended: true }));
   }
 
-  setRoutes() {
+  setRoutes () {
     const start = Date.now();
-    let routes = recursiveFileParse("/routes");
-    for (let route of routes) {
-      let splitPath = route.path.split("/");
+    const routes = recursiveFileParse("/routes");
+    for (const route of routes) {
+      const splitPath = route.path.split("/");
       switch (splitPath[splitPath.length - 1].split(".")[0]) {
         case "get":
         case "post":
@@ -83,15 +81,11 @@ class Site {
               route.content
             );
           } else
-            console.warn(
-              `The file ${route.path} does not have a function associated to it, be sure to module.exports = your function.`
-            );
+            console.warn(`The file ${route.path} does not have a function associated to it, be sure to module.exports = your function.`);
           break;
 
         default:
-          console.warn(
-            `The file ${route.path} is of an unsupported type, it should be named get.js, post.js, put.js, patch.js, or delete.js.`
-          );
+          console.warn(`The file ${route.path} is of an unsupported type, it should be named get.js, post.js, put.js, patch.js, or delete.js.`);
           break;
       }
     }
@@ -100,7 +94,7 @@ class Site {
       "/",
       express.static(__dirname + "/static/build/", {
         dotfiles: "ignore",
-        extensions: ["html", "htm", "js", "css"],
+        extensions: [ "html", "htm", "js", "css" ],
       })
     );
   }
