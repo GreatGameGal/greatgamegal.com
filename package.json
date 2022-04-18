@@ -8,11 +8,9 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "format": "prettier --write .",
-    "lint": "eslint --fix .",
-    "formatAndLint": "npm-run-all format lint",
+    "lintAndFix": "eslint --fix .",
     "start": "node .",
-    "dev": "nodemon --ignore ./static/* --exec npm-run-all formatAndLint start"
+    "dev": "nodemon --ignore ./static/* --exec npm-run-all lintAndFix start"
   },
   "dependencies": {
     "express": "^4.17.3",
@@ -21,7 +19,6 @@
   "devDependencies": {
     "eslint": "^8.13.0",
     "espree": "^9.3.1",
-    "nodemon": "^2.0.15",
-    "prettier": "^2.6.2"
+    "nodemon": "^2.0.15"
   }
 }
