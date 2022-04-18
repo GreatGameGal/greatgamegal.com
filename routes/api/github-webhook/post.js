@@ -30,9 +30,11 @@ module.exports = function (req, res) {
         res.sendStatus(200);
       }
       res.sendStatus(401);
+      res.end();
     });
-  } else
+  } else {
     res.sendStatus(401);
+    res.end();
+  }
 
-  res.end();
 };
