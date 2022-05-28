@@ -22,7 +22,9 @@
     "nodemon": "^2.0.15"
   },
   "nodemonConfig": {
-    "ignore": ["static/*"],
+    "ignore": [
+      "static/*"
+    ],
     "delay": 1000
   }
 }
