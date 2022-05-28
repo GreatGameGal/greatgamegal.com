@@ -5,8 +5,9 @@ function recursiveFileParse (path) {
   const fileReturn = [];
   for (const file of fs.readdirSync(currPath)) {
     if (fs.lstatSync(`${currPath}/${file}`).isDirectory()) {
-      for (const returnedFile of recursiveFileParse(`${path}/${file}`))
+      for (const returnedFile of recursiveFileParse(`${path}/${file}`)) {
         fileReturn.push(returnedFile);
+      }
 
     } else {
       try {

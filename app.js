@@ -44,8 +44,9 @@ class Site {
 
   setupEventsAndListeners () {
     const start = Date.now();
-    for (const event of this.events)
+    for (const event of this.events) {
       this.eventHandler.removeListener(event.content.type, event.content.run);
+    }
 
     this.events = recursiveFileParse("/events");
     for (const eventFile of this.events) {
@@ -53,8 +54,9 @@ class Site {
       if (typeof event.run === "function") {
         event.run = event.run.bind(this);
         this.eventHandler.addListener(event.event, event.run);
-      } else
+      } else {
         console.warn(`The run of the event file ${eventFile.path} is not valid, it must be a function.`);
+      }
     }
     console.log(`Added ${this.events.length} events in ${Date.now() - start}ms.`);
   }
@@ -80,8 +82,9 @@ class Site {
               "/" + splitPath.slice(2, splitPath.length - 1).join("/"),
               route.content
             );
-          } else
+          } else {
             console.warn(`The file ${route.path} does not have a function associated to it, be sure to module.exports = your function.`);
+          }
           break;
 
         default:
@@ -94,7 +97,12 @@ class Site {
       "/",
       express.static(__dirname + "/static/build/", {
         dotfiles: "ignore",
-        extensions: [ "html", "htm", "js", "css" ],
+        extensions: [
+          "html",
+          "htm",
+          "js",
+          "css",
+        ],
       })
     );
   }
