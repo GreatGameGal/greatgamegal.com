@@ -1,30 +1,30 @@
 {
   "name": "greatgamegal.com",
   "version": "1.0.0",
-  "description": "A personal website developed by GreatGameGal.",
-  "main": "app.js",
-  "repository": "git@github.com:GreatGameGal/greatgamegal.com.git",
   "author": "Serenity Braesch <thegreatgamegal@gmail.com>",
-  "license": "MIT",
-  "private": true,
-  "scripts": {
-    "lintAndFix": "eslint --fix .",
-    "start": "node .",
-    "dev": "nodemon --exec npm-run-all lintAndFix start"
-  },
-  "dependencies": {
-    "express": "^4.17.3",
-    "npm-run-all": "^4.1.5"
-  },
+  "repository": "git@github.com:GreatGameGal/greatgamegal.com.git",
+  "main": "app.ts",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.12.0",
+    "bun-types": "^1.0.14",
     "eslint": "^8.13.0",
     "espree": "^9.3.1",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.3.2"
   },
+  "description": "A personal website developed by GreatGameGal.",
+  "license": "MIT",
   "nodemonConfig": {
     "ignore": [
       "static/*"
     ],
     "delay": 1000
+  },
+  "private": true,
+  "scripts": {
+    "lintAndFix": "eslint --fix .",
+    "start": "bun run .",
+    "dev": "nodemon --exec npm-run-all lintAndFix start"
   }
 }
