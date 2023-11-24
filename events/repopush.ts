@@ -24,13 +24,36 @@ export function run (this: Server, e: {
     case process.env.HTML_REPO:
       console.log("Updating website from repo.");
       for (const cmd of [
-        "git fetch origin master",
-        "git reset --hard origin/master",
-        "git pull origin master --force",
-        "yarn install",
-        "yarn run build",
+        [
+          "git",
+          "fetch",
+          "origin",
+          "master",
+        ],
+        [
+          "git",
+          "reset",
+          "--hard",
+          "origin/master",
+        ],
+        [
+          "git",
+          "pull",
+          "origin",
+          "master",
+          "--force",
+        ],
+        [ "bun", "install" ],
+        [
+          "bun",
+          "run",
+          "build",
+        ],
       ]) {
-        console.log(execSync(cmd, { cwd: `${this.basedir}/static` }).toString());
+        console.log(Bun.spawnSync(cmd, {
+          cwd: `${this.basedir}/static`,
+          env: process.env,
+        }).toString());
       }
 
       console.log("Website update completed");
