@@ -80,12 +80,6 @@
       "template-curly-spacing": ["error", "never"],
       "template-tag-spacing": ["error", "never"],
       "wrap-iife": ["error", "inside"],
-      "yield-star-spacing": ["error", {"before": true, "after": false}],
-      "no-restricted-syntax": ["error",
-      {
-        "selector": "SwitchCase > *.consequent[type!='BlockStatement']",
-        "message": "Switch cases without blocks are disallowed."
-      }
-    ]
+      "yield-star-spacing": ["error", {"before": true, "after": false}]
   }
 }
