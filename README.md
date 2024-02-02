@@ -32,7 +32,7 @@ While the backend doesn't need to be built, the frontend does. The backend has a
 bun run build
 ```
 ### Step 5: Configure
-Rename example.env to .env and begin to configure! `PORT`, `KEY_PATH`, and `CERT_PATH` are required, but `HTTP_PORT`, `GITHUB_SECRET`, `SERVER_REPO`, and `HTTP_REPO` are all optional.
+Copy example.env to .env and begin to configure! `PORT`, `KEY_PATH`, and `CERT_PATH` are required, but `HTTP_PORT`, `GITHUB_SECRET`, `SERVER_REPO`, and `HTTP_REPO` are all optional.
 Setting `HTTP_PORT` is recommended will enable redirecting from access on that port to a HTTPS address on PORT.   
 Setting `GITHUB_SECRET` and `SERVER_REPO` or `HTTP_REPO` will enable integration to restart on updates to those repos if you've set up a webhook for them.
 ### Step 6: Run the Project
