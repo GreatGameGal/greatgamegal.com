@@ -28,6 +28,6 @@
     "start": "bun run .",
     "dev": "nodemon --exec 'bun run lintAndFix && bun run start'",
     "installAll": "bun install && bun install --cwd ./static",
-    "build": "bun --cwd ./static run build"
+    "build": "cd ./static && bun run build && cd -"
   }
 }
