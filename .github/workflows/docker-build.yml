@@ -7,10 +7,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+      with:
+        ssh-key: "${{ secrets.GIT_SSH }}"
     - name: Build Docker image
       run: |
         git submodule update --init --recursive
         docker build . --file Dockerfile --tag greatgamegal/greatgamegal.com:$(date +%s) --tag greatgamegal/greatgamegal.com:latest
-        echo ${{ secrets.DOCKEr_HUB_KEY }} | docker login -u ${{ secrets.DOCKER_HUB_USER }} --password-stdin
+        echo ${{ secrets.DOCKER_HUB_KEY }} | docker login -u ${{ secrets.DOCKER_HUB_USER }} --password-stdin
         docker push greatgamegal/greatgamegal.com --all-tags
         docker logout
