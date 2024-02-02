@@ -108,8 +108,8 @@ for await (const file of RECURSIVE_TS_GLOB.scan("./routes")) {
 
 // Creates HTTP server to redirect to HTTPS server.
 if (HTTP_PORT != undefined) {
-  for (const port_str of HTTP_PORT.split(",")) {
-    const port = parseFloat(port_str);
+  for (const portStr of HTTP_PORT.split(",")) {
+    const port = parseFloat(portStr);
     if (!Number.isNaN(port) && Number.isInteger(port)) {
       Bun.serve({
         fetch(req) {
