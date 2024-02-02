@@ -5,23 +5,11 @@ import { Server } from "./Server";
 const basedir = import.meta.dir;
 const RECURSIVE_TS_GLOB = new Bun.Glob("**/*.ts");
 
-const ROUTE_TYPES = [
-  "GET",
-  "POST",
-  "PUT",
-  "PATCH",
-  "DELETE",
-];
+const ROUTE_TYPES = ["GET", "POST", "PUT", "PATCH", "DELETE"];
 // Could be expanded if necessary, I don't expect it will be.
-const EXTENSION_ASSUMPTIONS = [
-  "html",
-  "js",
-  "css",
-];
+const EXTENSION_ASSUMPTIONS = ["html", "js", "css"];
 
-const {
-  KEY_PATH, CERT_PATH, PORT, HTTP_PORT,
-} = Object.assign(
+const { KEY_PATH, CERT_PATH, PORT, HTTP_PORT } = Object.assign(
   {},
   { PORT: "443" },
   process.env
@@ -37,7 +25,7 @@ const events = [];
 
 const server: Server = Object.assign(
   Bun.serve({
-    fetch (req) {
+    fetch(req) {
       const url = new URL(req.url);
       if (routes.has(`${url.pathname}/${req.method}`)) {
         return routes
@@ -58,7 +46,8 @@ const server: Server = Object.assign(
           }
         }
         if (fs.existsSync(path)) {
-          return new Response(Bun.file(path));
+          const file = Bun.file(path);
+          return new Response(file);
         }
       }
 
@@ -97,14 +86,18 @@ for await (const file of RECURSIVE_TS_GLOB.scan("./routes")) {
     const route = await import(path);
     routes.set(`/${file.slice(0, file.lastIndexOf("/"))}/${method}`, route);
   } else {
-    console.warn(`The file ${file} represents an unsupported method, it should be named one of the following: ${ROUTE_TYPES.map((e) => e.toLowerCase() + ".ts").join(", ")}`);
+    console.warn(
+      `The file ${file} represents an unsupported method, it should be named one of the following: ${ROUTE_TYPES.map(
+        (e) => e.toLowerCase() + ".ts"
+      ).join(", ")}`
+    );
   }
 }
 
 // Creates HTTP server to redirect to HTTPS server.
 if (HTTP_PORT != undefined) {
   Bun.serve({
-    fetch (req) {
+    fetch(req) {
       const url = new URL(req.url);
       return Response.redirect(
         "https://" +
