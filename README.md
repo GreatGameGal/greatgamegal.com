@@ -13,16 +13,16 @@ There are a few things needed to run this project. Firstly Bun, the JavaScript R
 Clone the project! Go to your desired folder and run one of the following commands, depending on if you prefer HTTPS or SSH for git cloning.
 SSH
 ```sh
-$ git clone git@github.com:GreatGameGal/html-greatgamegal.com.git --recursive
+$ git clone git@github.com:GreatGameGal/greatgamegal.com.git --recursive
 ```
 or HTML
 ```sh
-$ git clone https://github.com/GreatGameGal/html-greatgamegal.com.git --recursive
+$ git clone https://github.com/GreatGameGal/greatgamegal.com.git --recursive
 ```
 ### Step 3: Run Install
 First you need to actually go into the project directory using the following command.
 ```sh
-$ cd html-greatgamegal
+$ cd greatgamegal
 ```
 Then run the following command to install all required dependencies for both the front-end and the backend!
 ```sh
