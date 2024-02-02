@@ -24,7 +24,7 @@ cd greatgamegal.com
 ```
 Then run the following command to install all required dependencies for both the front-end and the backend!
 ```sh
-bun run install
+bun run installAll
 ```
 ### Step 4: Run Build
 While the backend doesn't need to be built, the frontend does. The backend has a build script to help you with this!
