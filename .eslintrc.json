@@ -1,4 +1,4 @@
-﻿{
+{
   "root": true,
   "env": {
     "browser": true,
@@ -17,7 +17,7 @@
     "sourceType": "module"
   },
   "plugins": ["@typescript-eslint"],
-  "ignorePatterns": ["static"],
+  "ignorePatterns": ["static", ".github"],
   "rules": {
     "no-constructor-return": "error",
     "no-duplicate-imports": "error",
