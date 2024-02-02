@@ -19,12 +19,12 @@ const EXTENSION_ASSUMPTIONS = [
   "css",
 ];
 
-const { KEY_PATH, CERT_PATH, PORT, HTTP_PORT } = Object.assign(
+const {
+  KEY_PATH, CERT_PATH, PORT, HTTP_PORT,
+} = Object.assign(
   {},
-  {
-    PORT: "443",
-  },
-  process.env,
+  { PORT: "443" },
+  process.env
 );
 
 if (KEY_PATH == null || CERT_PATH == null) {
@@ -35,41 +35,46 @@ if (KEY_PATH == null || CERT_PATH == null) {
 const routes = new Map();
 const events = [];
 
-const server: Server = Object.assign(Bun.serve({
-  fetch (req) {
-    const url = new URL(req.url);
-    if (routes.has(`${url.pathname}/${req.method}`)) {
-      return routes.get(`${url.pathname}/${req.method}`).handle.call(server, req);
-    }
-    if (req.method == "GET") {
-      let path = `${basedir}/static/build${url.pathname}`;
-      if (path.endsWith("/")) {
-        path += "index.html";
+const server: Server = Object.assign(
+  Bun.serve({
+    fetch (req) {
+      const url = new URL(req.url);
+      if (routes.has(`${url.pathname}/${req.method}`)) {
+        return routes
+          .get(`${url.pathname}/${req.method}`)
+          .handle.call(server, req);
       }
-      if (!url.pathname.includes(".")) {
-        for(const extension of EXTENSION_ASSUMPTIONS) {
-          if (fs.existsSync(path + "." + extension)) {
-            path += "." + extension;
-            break;
+      if (req.method == "GET") {
+        let path = `${basedir}/static/build${url.pathname}`;
+        if (path.endsWith("/")) {
+          path += "index.html";
+        }
+        if (!url.pathname.includes(".")) {
+          for (const extension of EXTENSION_ASSUMPTIONS) {
+            if (fs.existsSync(path + "." + extension)) {
+              path += "." + extension;
+              break;
+            }
           }
         }
+        if (fs.existsSync(path)) {
+          return new Response(Bun.file(path));
+        }
       }
-      if (fs.existsSync(path)) {
-        return new Response(Bun.file(path));
-      }
-    }
 
-    return new Response("ERROR: File not found", { status: 404 });
-  },
-  tls: {
-    key: Bun.file(KEY_PATH),
-    cert: Bun.file(CERT_PATH),
-  },
-  port: PORT,
-}), {
-  eventHandler: new EventEmitter(),
-  basedir,
-});
+      return new Response("ERROR: File not found", { status: 404 });
+    },
+    tls: {
+      key: Bun.file(KEY_PATH),
+      cert: Bun.file(CERT_PATH),
+    },
+    port: PORT,
+  }),
+  {
+    eventHandler: new EventEmitter(),
+    basedir,
+  }
+);
 
 for await (const file of RECURSIVE_TS_GLOB.scan("./events")) {
   const path = `${basedir}/events/${file}`;
@@ -92,25 +97,21 @@ for await (const file of RECURSIVE_TS_GLOB.scan("./routes")) {
     const route = await import(path);
     routes.set(`/${file.slice(0, file.lastIndexOf("/"))}/${method}`, route);
   } else {
-    console.warn(
-      `The file ${file} represents an unsupported method, it should be named one of the following: ${ROUTE_TYPES.map(
-        (e) => e.toLowerCase() + ".ts",
-      ).join(", ")}`,
-    );
+    console.warn(`The file ${file} represents an unsupported method, it should be named one of the following: ${ROUTE_TYPES.map((e) => e.toLowerCase() + ".ts").join(", ")}`);
   }
 }
 
 // Creates HTTP server to redirect to HTTPS server.
 if (HTTP_PORT != undefined) {
   Bun.serve({
-    fetch(req) {
+    fetch (req) {
       const url = new URL(req.url);
       return Response.redirect(
         "https://" +
           url.hostname +
           (PORT != "443" ? `:${PORT}` : "") +
           url.pathname,
-        308,
+        308
       );
     },
     port: HTTP_PORT,
