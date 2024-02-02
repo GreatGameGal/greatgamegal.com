@@ -1,0 +1,15 @@
+name: Docker Build
+on:
+  push:
+    branches: [ "main" ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build Docker image
+      run: |
+        docker build . --file Dockerfile --tag greatgamegal/greatgamegal.com:$(date +%s) --tag greatgamegal/greatgamegal.com:latest
+        echo ${{ secrets.DOCKEr_HUB_KEY }} | docker login -u ${{ secrets.DOCKER_HUB_USER }} --password-stdin
+        docker push greatgamegal/greatgamegal.com --all-tags
+        docker logout
