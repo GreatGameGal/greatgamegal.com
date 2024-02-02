@@ -25,6 +25,8 @@
   "scripts": {
     "lintAndFix": "eslint --fix .",
     "start": "bun run .",
-    "dev": "nodemon --exec npm-run-all lintAndFix start"
+    "dev": "nodemon --exec npm-run-all lintAndFix start",
+    "install": "bun install & bun install --cwd ./static",
+    "build": "bun --cwd ./static run build"
   }
 }
