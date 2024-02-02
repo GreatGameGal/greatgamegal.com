@@ -108,17 +108,22 @@ for await (const file of RECURSIVE_TS_GLOB.scan("./routes")) {
 
 // Creates HTTP server to redirect to HTTPS server.
 if (HTTP_PORT != undefined) {
-  Bun.serve({
-    fetch(req) {
-      const url = new URL(req.url);
-      return Response.redirect(
-        "https://" +
-          url.hostname +
-          (PORT != "443" ? `:${PORT}` : "") +
-          url.pathname,
-        308
-      );
-    },
-    port: HTTP_PORT,
-  });
+  for (const port_str of HTTP_PORT.split(",")) {
+    const port = parseFloat(port_str);
+    if (!Number.isNaN(port) && Number.isInteger(port)) {
+      Bun.serve({
+        fetch(req) {
+          const url = new URL(req.url);
+          return Response.redirect(
+            "https://" +
+              url.hostname +
+              (PORT != "443" ? `:${PORT}` : "") +
+              url.pathname,
+            308
+          );
+        },
+        port,
+      });
+    }
+  }
 }
