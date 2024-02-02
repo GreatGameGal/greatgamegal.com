@@ -12,7 +12,6 @@
     "eslint": "^8.56.0",
     "espree": "^10.0.0",
     "nodemon": "^3.0.3",
-    "npm-run-all": "^4.1.5",
     "typescript": "^5.3.3"
   },
   "description": "A personal website developed by GreatGameGal.",
@@ -27,7 +26,7 @@
   "scripts": {
     "lintAndFix": "eslint --fix .",
     "start": "bun run .",
-    "dev": "nodemon --exec npm-run-all lintAndFix start",
+    "dev": "nodemon --exec 'bun run lintAndFix && bun run start'",
     "install": "bun install & bun install --cwd ./static",
     "build": "bun --cwd ./static run build"
   }
