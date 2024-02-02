@@ -27,7 +27,7 @@
     "lintAndFix": "eslint --fix .",
     "start": "bun run .",
     "dev": "nodemon --exec 'bun run lintAndFix && bun run start'",
-    "install": "bun install & bun install --cwd ./static",
+    "install": "bun install && bun install --cwd ./static",
     "build": "bun --cwd ./static run build"
   }
 }
