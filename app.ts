@@ -20,6 +20,18 @@ if (KEY_PATH == null || CERT_PATH == null) {
   process.exit(1);
 }
 
+const key = Bun.file(KEY_PATH);
+const cert = Bun.file(CERT_PATH);
+
+if (!key.exists()) {
+  console.error(`ERROR: Key file ${KEY_PATH} does not exist.`);
+  process.exit(1);
+}
+if (!cert.exists()) {
+  console.error(`ERROR: Key file ${CERT_PATH} does not exist.`);
+  process.exit(1);
+}
+
 const routes = new Map();
 const events = [];
 
@@ -54,8 +66,8 @@ const server: Server = Object.assign(
       return new Response("ERROR: File not found", { status: 404 });
     },
     tls: {
-      key: Bun.file(KEY_PATH),
-      cert: Bun.file(CERT_PATH),
+      key,
+      cert,
     },
     port: PORT,
   }),
