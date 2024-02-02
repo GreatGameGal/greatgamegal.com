@@ -19,14 +19,13 @@ const EXTENSION_ASSUMPTIONS = [
   "css",
 ];
 
-
-
-const {
-  KEY_PATH, CERT_PATH, PORT, HTTP_PORT,
-} = Object.assign({}, {
-  PORT: "443",
-  HTTP_PORT: "80",
-}, process.env);
+const { KEY_PATH, CERT_PATH, PORT, HTTP_PORT } = Object.assign(
+  {},
+  {
+    PORT: "443",
+  },
+  process.env,
+);
 
 if (KEY_PATH == null || CERT_PATH == null) {
   console.error("ERROR: Key path or cert path not provided.");
@@ -86,23 +85,34 @@ for await (const file of RECURSIVE_TS_GLOB.scan("./events")) {
 
 for await (const file of RECURSIVE_TS_GLOB.scan("./routes")) {
   const path = `${basedir}/routes/${file}`;
-  const method = file.slice(file.lastIndexOf("/") + 1, file.lastIndexOf(".")).toUpperCase();
+  const method = file
+    .slice(file.lastIndexOf("/") + 1, file.lastIndexOf("."))
+    .toUpperCase();
   if (ROUTE_TYPES.includes(method)) {
     const route = await import(path);
     routes.set(`/${file.slice(0, file.lastIndexOf("/"))}/${method}`, route);
   } else {
-    console.warn(`The file ${file} represents an unsupported method, it should be named one of the following: ${
-      ROUTE_TYPES.map((e) => e.toLowerCase() + ".ts").join(", ")
-    }`);
+    console.warn(
+      `The file ${file} represents an unsupported method, it should be named one of the following: ${ROUTE_TYPES.map(
+        (e) => e.toLowerCase() + ".ts",
+      ).join(", ")}`,
+    );
   }
 }
 
-
 // Creates HTTP server to redirect to HTTPS server.
-Bun.serve({
-  fetch (req) {
-    const url = new URL(req.url);
-    return Response.redirect("https://" + url.hostname + (PORT != "443" ? `:${PORT}` : "") + url.pathname, 308);
-  },
-  port: HTTP_PORT,
-});
+if (HTTP_PORT != undefined) {
+  Bun.serve({
+    fetch(req) {
+      const url = new URL(req.url);
+      return Response.redirect(
+        "https://" +
+          url.hostname +
+          (PORT != "443" ? `:${PORT}` : "") +
+          url.pathname,
+        308,
+      );
+    },
+    port: HTTP_PORT,
+  });
+}
