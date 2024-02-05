@@ -1,5 +1,4 @@
 import EventEmitter from "events";
-import fs from "fs";
 import { Server } from "./Server";
 
 const basedir = import.meta.dir;
@@ -7,7 +6,7 @@ const RECURSIVE_TS_GLOB = new Bun.Glob("**/*.ts");
 
 const ROUTE_TYPES = ["GET", "POST", "PUT", "PATCH", "DELETE"];
 // Could be expanded if necessary, I don't expect it will be.
-const EXTENSION_ASSUMPTIONS = ["html", "js", "css"];
+const NAME_ASSUMPTIONS = ["index.html", ".html", ".js", ".css"];
 
 const { KEY_PATH, CERT_PATH, PORT, HTTP_PORT } = Object.assign(
   {},
@@ -37,7 +36,7 @@ const events = [];
 
 const server: Server = Object.assign(
   Bun.serve({
-    fetch(req) {
+    async fetch(req) {
       const url = new URL(req.url);
       if (routes.has(`${url.pathname}/${req.method}`)) {
         return routes
@@ -45,21 +44,17 @@ const server: Server = Object.assign(
           .handle.call(server, req);
       }
       if (req.method == "GET") {
-        let path = `${basedir}/static/build${url.pathname}`;
-        if (path.endsWith("/")) {
-          path += "index.html";
-        }
-        if (!url.pathname.includes(".")) {
-          for (const extension of EXTENSION_ASSUMPTIONS) {
-            if (fs.existsSync(path + "." + extension)) {
-              path += "." + extension;
-              break;
-            }
-          }
-        }
-        if (fs.existsSync(path)) {
-          const file = Bun.file(path);
+        const path = `${basedir}/static/build${url.pathname}`;
+        let file = Bun.file(path);
+        if (await file.exists()) {
           return new Response(file);
+        }
+        for (const extension of NAME_ASSUMPTIONS) {
+          const newPath = path + extension;
+          file = Bun.file(newPath);
+          if (await file.exists()) {
+            return new Response(file);
+          }
         }
       }
 
