@@ -23,7 +23,7 @@ SSH
 git clone git@github.com:GreatGameGal/greatgamegal.com.git --recursive
 ```
 
-or HTML
+or HTTPS
 
 ```sh
 git clone https://github.com/GreatGameGal/greatgamegal.com.git --recursive
