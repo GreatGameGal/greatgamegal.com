@@ -83,7 +83,7 @@ That's right, there's really only one step once you have docker installed and yo
 The easy way is to go to a directory you don't mind a bash script hanging out in and running the following commands, replacing the appropriate all caps text with what it indicates it wants.
 
 ```sh
-curl https://raw.githubusercontent.com/GreatGameGal/greatgamegal.com/main/run-dicker.sh -o docker-greatgamegal.com.sh
+curl https://raw.githubusercontent.com/GreatGameGal/greatgamegal.com/main/run-docker.sh -o docker-greatgamegal.com.sh
 sh ./docker-greatgamegal.com.sh -p REPLACE_WITH_PORT -h REPLACE_WITH_HTTP_PORT -s /PATH/TO/FOLDER/CONTAINING/KEY_AND_CERT
 ```
 
